@@ -1,26 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import HomePage from './pages/HomePage.react'
+import FellsPage from './pages/FellsPage.react'
+import FellDetailPage from './pages/felldetailpage/FellDetailPage.react'
+
+import "./index.css"
+
+export default function App() {
+    return (
+        <BrowserRouter>
+            <Switch>
+                <Route exact path="/" component={HomePage} />
+                <Route path="/home" component={HomePage} />
+                <Route exact path="/fells" component={FellsPage} />
+                <Route path="/fells/:id" component={FellDetailPage} />
+            </Switch>
+        </BrowserRouter>
+    )
 }
-
-export default App;

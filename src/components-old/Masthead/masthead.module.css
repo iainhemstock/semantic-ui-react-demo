@@ -1,0 +1,14 @@
+.masthead {
+    background:
+        radial-gradient( rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) ),
+        linear-gradient(to right, rgba(0,0,0,1), rgba(255,0,0,0)),
+        linear-gradient(rgba(0, 128, 50, 0.25), rgba(0, 128, 50, 0.25)),
+        url("../../images/crinkle_crags_bowfell.jpg");
+    -webkit-filter: brightness(200%);
+    filter: brightness(200%);
+    height: 80vh;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}

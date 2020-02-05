@@ -1,0 +1,10 @@
+.background-image {
+    background:
+        radial-gradient( rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8) ),
+        url("../../images/crinkle-crags-bowfell-3484x1960.jpg");
+    min-height: 100vh;
+    background-position: top;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}

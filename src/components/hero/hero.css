@@ -1,0 +1,88 @@
+/**
+ * Override semantic-ui css
+ */
+.ui.text.left.aligned.container {
+    max-width: 2000px !important;
+}
+
+section.ui.segment.marginPaddingReset {
+    margin: 8px 0px;
+    padding: 0px;
+}
+
+section.ui.segment.backgroundImage {
+    background:
+        radial-gradient( rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8) ),
+        url("../../images/crinkle-crags-bowfell-3484x1960.jpg");
+    min-height: 100vh;
+    background-position: top;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+h2.header.wainwright {
+    font-family: Tangerine, sans-serif;
+    font-weight: normal;
+    font-size: 50px;
+    color: white;
+    text-shadow: 2px 2px 2px #333;
+    position: relative;
+    top: 50px;
+    left: -115px;
+    padding-top: 50px;
+}
+
+h1.header.headline {
+    font-family: Roboto, sans-serif;
+    font-weight: 100;
+    font-size: 67px;
+    font-weight: 400;
+    color: rgb(255, 255, 255);
+    text-shadow: 3px 3px 2px #333;
+    margin-bottom: 0px;
+}
+
+h2.header.headline {
+    font-size: 21px;
+    font-weight: normal;
+    font-style: italic; 
+    text-shadow: 3px 3px 2px #333;
+    margin-top: 0px;
+    padding-bottom: 20px;
+}
+
+h3.header.subheadline {
+    font-weight: normal;
+    font-size: 12px;
+    color: rgb(255, 255, 255);
+    text-shadow: 1px 1px 1px #000;
+    line-height: 150%;
+}
+
+@media screen and (max-width: 576px) {
+    h2.header.wainwright {
+        font-size: 28px;
+        top: 108px;
+        left: -10px;
+    }
+
+    h1.header.headline {
+        font-size: 50px;
+    }
+
+    h1.header.headline {
+        font-size: 28px;
+        padding-top: 75px;
+    }
+
+    h2.header.subheadline {
+        font-size: 16px;
+    }
+}
+
+@media screen and (min-width: 1441px) {
+    .backgroundImage {
+        min-height: 50vh;
+    }
+}

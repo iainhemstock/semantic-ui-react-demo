@@ -1,0 +1,30 @@
+[
+    {
+        "id": 1,
+        "name": "Scafell Pike",
+        "height": 978,
+        "region": "Southern",
+        "isBagged": true
+    },
+    {
+        "id": 2,
+        "name": "Scafell",
+        "height": 964,
+        "region": "Southern",
+        "isBagged": false
+    },
+    {
+        "id": 3,
+        "name": "Helvellyn",
+        "height": 950,
+        "region": "Eastern",
+        "isBagged": false
+    },
+    {
+        "id": 4,
+        "name": "Skiddaw",
+        "height": 931,
+        "region": "Northern",
+        "isBagged": true
+    }
+]

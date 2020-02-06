@@ -8,6 +8,34 @@ alter database wainwright_fells character set utf8 collate utf8_general_ci;
 use wainwright_fells;
 
 /***************************************************************************************************
+* LAKES
+***************************************************************************************************/
+create table lakes (
+    id int not null auto_increment,
+    name varchar(25) not null,
+    primary key (id)
+);
+
+insert into lakes (name) 
+values 
+    ('Windermere'),
+    ('Ullswater'),
+    ('Derwentwater'),
+    ('Bassenthwaite Lake'),
+    ('Coniston Water'),
+    ('Haweswater'),
+    ('Thirlmere'),
+    ('Ennerdale Water'),
+    ('Wastwater'),
+    ('Crummock Water'),
+    ('Esthwaite Water'),
+    ('Buttermere'),
+    ('Grasmere'),
+    ('Loweswater'),
+    ('Rydal Water'),
+    ('Brotherswater');
+
+/***************************************************************************************************
  * REGIONS
  **************************************************************************************************/
 create table regions (
@@ -16,61 +44,96 @@ create table regions (
     primary key (region_id)
 );
 
-set @book1_region = 'Eastern Fells';
-set @book2_region = 'Far Eastern Fells';
-set @book3_region = 'Central Fells';
-set @book4_region = 'Southern Fells';
-set @book5_region = 'Northern Fells';
-set @book6_region = 'North Western Fells';
-set @book7_region = 'Western Fells';
+drop function if exists region_insert;
+delimiter //
+create function region_insert(name varchar(50)) 
+returns int
+deterministic
+begin
+    insert into regions (region_name) values (name);
+    return last_insert_id();
+end//
+delimiter ;
 
-insert into regions (region_name) values (@book1_region); 
-insert into regions (region_name) values (@book2_region); 
-insert into regions (region_name) values (@book3_region); 
-insert into regions (region_name) values (@book4_region);
-insert into regions (region_name) values (@book5_region);
-insert into regions (region_name) values (@book6_region);
-insert into regions (region_name) values (@book7_region); 
+set @e = region_insert('Eastern Fells');
+
+set @fe = region_insert('Far Eastern Fells');
+
+set @c = region_insert('Central Fells');
+
+set @s = region_insert('Southern Fells');
+
+set @n = region_insert('Northern Fells');
+
+set @nw = region_insert('North Western Fells');
+
+set @w = region_insert('Western Fells');
+
+/***************************************************************************************************
+* OS MAPS
+***************************************************************************************************/
+create table os_maps (
+    id int not null unique auto_increment,
+    name varchar(25) not null,
+    primary key (id)
+);
+
+insert into os_maps (name)
+values 
+    ('OS Landrangers 89'),
+    ('OS Landrangers 90'),
+    ('OS Landrangers 96'),
+    ('OS Landrangers 97'),
+    ('OS Explorer OL4'),
+    ('OS Explorer OL5'),
+    ('OS Explorer OL6'),
+    ('OS Explorer OL7');
+
+/***************************************************************************************************
+* Listings
+***************************************************************************************************/
+create table listings (
+    id int not null unique auto_increment,
+    name varchar(25) not null,
+    primary key (id)
+);
+
+insert into listings (name) 
+values 
+    ('Wainwright'),
+    ('Hewitt'),
+    ('Marilyn'),
+    ('Nuttall'),
+    ('Country high point');
 
 /***************************************************************************************************
  * FELLS
  **************************************************************************************************/
 create table fells (
-    fell_id int not null auto_increment,
-    fell_name varchar(25) not null,
-    fell_height_meters int not null,
+    id int not null auto_increment,
+    name varchar(25) not null,
+    height_meters int not null,
     overall_height_rank int, -- is modified to be not null after the overall_height_ranks have been calculated and inserted
     region_id int not null,
     prominence_meters int not null,
     os_map_ref varchar(8) not null,
-    primary key (fell_id),
+    primary key (id),
     foreign key (region_id) references regions(region_id)
 );
 
--- assign region ids to vars to be used in the fell insert function
-set @e = (select region_id from regions where region_name = @book1_region);
-set @fe = (select region_id from regions where region_name = @book2_region);
-set @c = (select region_id from regions where region_name = @book3_region);
-set @s = (select region_id from regions where region_name = @book4_region);
-set @n = (select region_id from regions where region_name = @book5_region);
-set @nw = (select region_id from regions where region_name = @book6_region);
-set @w = (select region_id from regions where region_name = @book7_region);
-
--- a function that inserts a fell into the database
--- the resulting function call is shorter and simpler to work with and maintain
 drop function if exists fell_insert;
 delimiter //
 create function fell_insert(
-    fell_name varchar(50), 
-    fell_height_meters int, 
+    name varchar(50), 
+    height_meters int, 
     region_id int, 
     prominence_meters int,
     os_map_ref varchar(8)) 
 returns int
 deterministic
 begin
-    insert into fells (fell_name, fell_height_meters, region_id, prominence_meters, os_map_ref) 
-        values (fell_name, fell_height_meters, region_id, prominence_meters, os_map_ref);
+    insert into fells (name, height_meters, region_id, prominence_meters, os_map_ref) 
+        values (name, height_meters, region_id, prominence_meters, os_map_ref);
 
     return last_insert_id();
 end//
@@ -552,72 +615,21 @@ set @row_number = 0;
 UPDATE fells 
 SET overall_height_rank = (
     SELECT @row_number := @row_number +1) 
-    ORDER BY fell_height_meters desc;
+    ORDER BY height_meters desc;
 
 alter table fells modify overall_height_rank int not null;
-
-/***************************************************************************************************
-* Listings
-***************************************************************************************************/
-create table listings (
-    listing_id int not null unique auto_increment,
-    listing_name varchar(25) not null,
-    primary key (listing_id)
-);
-
-insert into listings (listing_name) 
-values 
-    ('Wainwright'),
-    ('Hewitt'),
-    ('Marilyn'),
-    ('Nuttall'),
-    ('Country high point');
-
-/***************************************************************************************************
-* OS MAPS
-***************************************************************************************************/
-create table os_maps (
-    map_id int not null unique auto_increment,
-    map_name varchar(25) not null,
-    primary key (map_id)
-);
-
-insert into os_maps (map_name)
-values 
-    ('OS Landrangers 89'),
-    ('OS Landrangers 90'),
-    ('OS Landrangers 96'),
-    ('OS Landrangers 97'),
-    ('OS Explorer OL4'),
-    ('OS Explorer OL5'),
-    ('OS Explorer OL6'),
-    ('OS Explorer OL7');
-
-/***************************************************************************************************
-* PARENT PEAKS
-***************************************************************************************************/
-create table parent_peaks (
-    parent_peak_id int not null unique auto_increment,
-    parent_peak_name varchar(25) not null,
-    primary key (parent_peak_id)
-);
-
-insert into parent_peaks (parent_peak_name)
-values 
-    ('Snowdon'),
-    ('Scafell Pike');
 
 /***************************************************************************************************
 * FELL DECIMAL COORDS
 ***************************************************************************************************/
 create table fell_decimal_coords (
-    fell_id int not null unique,
+    id int not null unique,
     latitude double not null,
     longitude double not null,
-    primary key (fell_id)
+    primary key (id)
 );
 
-insert into fell_decimal_coords (fell_id, latitude, longitude)
+insert into fell_decimal_coords (id, latitude, longitude)
 values 
     -- eastern fells -----------------------------------------
     (@helvellyn_id, 54.527232, -3.016054),
@@ -840,30 +852,3 @@ values
     (@low_fell_id, 54.59119, -3.33707),
     (@buckbarrow_id, 54.442, -3.33514),
     (@fellbarrow_id, 54.605, -3.342);
-
-/***************************************************************************************************
-* LAKES
-***************************************************************************************************/
-create table lakes (
-    lake_id int not null auto_increment,
-    lake_name varchar(25) not null,
-    primary key (lake_id)
-);
-
-insert into lakes (lake_name) values ('Windermere');
-insert into lakes (lake_name) values ('Ullswater');
-insert into lakes (lake_name) values ('Derwentwater');
-insert into lakes (lake_name) values ('Bassenthwaite Lake');
-insert into lakes (lake_name) values ('Coniston Water');
-insert into lakes (lake_name) values ('Haweswater');
-insert into lakes (lake_name) values ('Thirlmere');
-insert into lakes (lake_name) values ('Ennerdale Water');
-insert into lakes (lake_name) values ('Wastwater');
-insert into lakes (lake_name) values ('Crummock Water');
-insert into lakes (lake_name) values ('Esthwaite Water');
-insert into lakes (lake_name) values ('Buttermere');
-insert into lakes (lake_name) values ('Grasmere');
-insert into lakes (lake_name) values ('Loweswater');
-insert into lakes (lake_name) values ('Rydal Water');
-insert into lakes (lake_name) values ('Brotherswater');
-
